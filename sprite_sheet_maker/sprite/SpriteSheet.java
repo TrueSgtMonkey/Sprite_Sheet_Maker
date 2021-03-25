@@ -9,15 +9,16 @@ public class SpriteSheet
 {
 	//will contain the full list of pictures in the specified folder
 	private ArrayList<BufferedImage> pics;
-	private int width, height, gridWidth, gridHeight;
+	private int width, height, gridWidth, gridHeight, columns;
 	private boolean doneWithWidth;
 	private BufferedImage outputImage;
 	
-	public SpriteSheet(String folder)
+	public SpriteSheet(String folder, int columns)
 	{
 		File path = new File(folder);
 		//setting up dimensions for the single image
 		width = 0; height = 0; gridWidth = 0; gridHeight = 0;
+		this.columns = columns;
 		doneWithWidth = false;
 		if(path.exists())
 		{
@@ -47,7 +48,7 @@ public class SpriteSheet
 	public void setupWidthHeight(int i)
 	{
 		//new row
-		if(i % 8 == 0 && i > 0)
+		if(i % columns == 0 && i > 0)
 		{
 			height += pics.get(i).getHeight();
 			doneWithWidth = true;
@@ -61,8 +62,8 @@ public class SpriteSheet
 	public void setupTiles(int i)
 	{
 		// the top left pixel to start at
-		int currX = gridWidth * (i % 8);
-		int currY = gridHeight * (i / 8);
+		int currX = gridWidth * (i % columns);
+		int currY = gridHeight * (i / columns);
 		
 		outputImage.setData(pics.get(i).getData().createTranslatedChild(currX, currY));
 	}
