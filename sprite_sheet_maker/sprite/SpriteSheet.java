@@ -44,6 +44,20 @@ public class SpriteSheet
 		}
 	}
 	
+	public void setupWidthHeight(int i)
+	{
+		//new row
+		if(i % 8 == 0 && i > 0)
+		{
+			height += pics.get(i).getHeight();
+			doneWithWidth = true;
+		}
+		else if(!doneWithWidth)
+		{
+			width += pics.get(i).getWidth();
+		}
+	}
+	
 	public void setupTiles(int i)
 	{
 		// the top left pixel to start at
@@ -53,11 +67,11 @@ public class SpriteSheet
 		outputImage.setData(pics.get(i).getData().createTranslatedChild(currX, currY));
 	}
 	
-	public void saveImage(String filename)
+	public void saveImage(String path, String filename)
 	{
 		try {
 			// retrieve image
-			File outputfile = new File(filename + ".png");
+			File outputfile = new File(path + "\\" + filename + ".png");
 			ImageIO.write(outputImage, "png", outputfile);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,23 +84,9 @@ public class SpriteSheet
 		try {
 			image = ImageIO.read(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return image;
-	}
-	
-	public void setupWidthHeight(int i)
-	{
-		if(i % 8 == 0 && i > 0)
-		{
-			height += pics.get(i).getHeight();
-			doneWithWidth = true;
-		}
-		else if(!doneWithWidth)
-		{
-			width += pics.get(i).getWidth();
-		}
 	}
 	
 	public ArrayList<BufferedImage> getPics() { return pics; }
