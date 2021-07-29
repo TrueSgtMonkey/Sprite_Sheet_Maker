@@ -38,8 +38,22 @@ public class ImageGen
 		readPath = paths.nextLine();
 		savePath = paths.nextLine();
 		
-		jReader = new JFileChooser(new File(readPath));
-		jSaver = new JFileChooser(new File(savePath));
+		File readFile = new File(readPath);
+		File saveFile = new File(savePath);
+		
+		if(!readFile.exists())
+		{
+			readPath = "../";
+			readFile = new File(readPath);
+		}
+		if(!saveFile.exists())
+		{
+			savePath = "../";
+			saveFile = new File(savePath);
+		}
+		
+		jReader = new JFileChooser(readFile);
+		jSaver = new JFileChooser(saveFile);
 		
 		jReader.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		jSaver.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -55,6 +69,12 @@ public class ImageGen
 	{
 		System.out.print("Enter how many images you want per row: ");
 		int columns = Integer.valueOf(myObj.nextLine());
+		//error checking
+		while(columns <= 0)
+		{
+			System.out.print("Enter how many images you want per row (Must be greater than 0): ");
+			columns = Integer.valueOf(myObj.nextLine());
+		}
 		
 		int sel = jReader.showOpenDialog(null);
 		
@@ -70,6 +90,10 @@ public class ImageGen
 			
 			spriteSheets.add(sprite);
 			return sprite;
+		}
+		else
+		{
+			System.out.println("Nothing selected... Exiting.");
 		}
 		return null;
 	}
@@ -98,7 +122,10 @@ public class ImageGen
 				System.out.println("An error occurred.");
 				e.printStackTrace();
 			}
-			
+		}
+		else
+		{
+			System.out.println("Nothing selected... Exiting.");
 		}
 	}
 	
@@ -127,6 +154,10 @@ public class ImageGen
 				e.printStackTrace();
 			}
 			
+		}
+		else
+		{
+			System.out.println("Nothing selected... Exiting.");
 		}
 	}
 }

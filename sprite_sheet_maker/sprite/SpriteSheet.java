@@ -29,14 +29,20 @@ public class SpriteSheet
 			gridHeight = height;
 			for(int i = 0; i < files.length; i++)
 			{
-				pics.add(getImage(files[i]));
-				setupWidthHeight(i);
+				if(files[i].getName().contains(".png") || files[i].getName().contains(".jpg"))
+				{
+					pics.add(getImage(files[i]));
+					setupWidthHeight(i);
+				}
 			}
 			outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			for(int i = 0; i < pics.size(); i++)
 			{
+				System.out.print("\r[");
 				setupTiles(i);
+				System.out.print((i+1) + "/" + pics.size() + "]");
 			}
+			System.out.println();
 		}
 		else
 		{
@@ -73,7 +79,9 @@ public class SpriteSheet
 		try {
 			// retrieve image
 			File outputfile = new File(path + "\\" + filename + ".png");
+			System.out.print("Writing image to file...");
 			ImageIO.write(outputImage, "png", outputfile);
+			System.out.println(" done!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -82,9 +90,12 @@ public class SpriteSheet
 	public BufferedImage getImage(File file)
 	{
 		BufferedImage image = null;
-		try {
+		try 
+		{
 			image = ImageIO.read(file);
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 		return image;
