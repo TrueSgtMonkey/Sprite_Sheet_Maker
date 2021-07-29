@@ -1,2 +1,2 @@
-C:\tmp\dude
-D:\cody_stuff\tutorials\05_bouncing_platform\bouncing_platform_tutorial
+C:\
+C:\
