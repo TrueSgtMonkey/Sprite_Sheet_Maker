@@ -78,7 +78,7 @@ public class SpriteSheet
 	{
 		try {
 			// retrieve image
-			File outputfile = new File(path + "\\" + filename + ".png");
+			File outputfile = new File(path + "/" + filename + ".png");
 			System.out.print("Writing image to file...");
 			ImageIO.write(outputImage, "png", outputfile);
 			System.out.println(" done!");
