@@ -25,6 +25,13 @@ public class ImageGen
 	//loading in the paths and getting the file chooser ready
 	public ImageGen()
 	{
+        String osName = System.getProperty("os.name").toLowerCase();
+        boolean isMacOs = osName.startsWith("mac os x");
+        if (isMacOs)
+        {
+            System.out.println("This is MacOS");
+        }
+        
 		Scanner paths = null;
 		try
 		{
@@ -43,7 +50,11 @@ public class ImageGen
 		
 		if(!readFile.exists())
 		{
-			readPath = "../";
+            if (isMacOs) 
+            {
+              readPath = "../";
+            }
+			
 			readFile = new File(readPath);
 		}
 		if(!saveFile.exists())
