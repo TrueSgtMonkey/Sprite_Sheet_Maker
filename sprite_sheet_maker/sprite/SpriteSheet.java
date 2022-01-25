@@ -1,6 +1,7 @@
 package sprite;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -24,25 +25,44 @@ public class SpriteSheet
 		{
 			pics = new ArrayList<BufferedImage>();
 			File[] files = path.listFiles();
-			gridWidth = getImage(files[0]).getWidth();
-			height = getImage(files[0]).getHeight();
-			gridHeight = height;
-			for(int i = 0; i < files.length; i++)
-			{
-				if(files[i].getName().contains(".png") || files[i].getName().contains(".jpg"))
-				{
-					pics.add(getImage(files[i]));
-					setupWidthHeight(i);
-				}
-			}
-			outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			for(int i = 0; i < pics.size(); i++)
-			{
-				System.out.print("\r[");
-				setupTiles(i);
-				System.out.print((i+1) + "/" + pics.size() + "]");
-			}
-			System.out.println();
+            Arrays.sort(files);
+            if(files != null)
+            {
+    			for(int i = 0, j = 0; i < files.length; i++)
+    			{
+    				if(files[i].getName().contains(".png") || files[i].getName().contains(".jpg"))
+    				{
+                        //the first image we come across, we will set all the grid and height
+                        if(gridWidth == 0 && height == 0 && gridHeight == 0)
+                        {
+                			gridWidth = getImage(files[i]).getWidth();
+                			height = getImage(files[i]).getHeight();
+                			gridHeight = height;
+                        }
+    					pics.add(getImage(files[i]));
+                        //making sure the i is in the range of the array list
+    					setupWidthHeight(j);
+                        j++;
+    				}
+                    else
+                    {
+                        //not a picture
+                        columns--;
+                    }
+    			}
+    			outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    			for(int i = 0; i < pics.size(); i++)
+    			{
+    				System.out.print("\r[");
+    				setupTiles(i);
+    				System.out.print((i+1) + "/" + pics.size() + "]");
+    			}
+    			System.out.println();
+            }
+			else
+            {
+                System.out.println("Cannot find " + folder);
+            }
 		}
 		else
 		{
@@ -78,7 +98,7 @@ public class SpriteSheet
 	{
 		try {
 			// retrieve image
-			File outputfile = new File(path + "\\" + filename + ".png");
+			File outputfile = new File(path + "/" + filename + ".png");
 			System.out.print("Writing image to file...");
 			ImageIO.write(outputImage, "png", outputfile);
 			System.out.println(" done!");
