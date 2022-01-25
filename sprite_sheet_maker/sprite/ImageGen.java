@@ -28,6 +28,16 @@ public class ImageGen
     {
         String osName = System.getProperty("os.name").toLowerCase();
         isMacOS = osName.startsWith("mac os x");
+        
+        if(isMacOS)
+        {
+            System.out.println("You are using MacOS!");
+        }
+        else
+        {
+            System.out.println("You are not using MacOS!");
+        }
+        
         Scanner paths = null;
         try
         {
