@@ -110,8 +110,6 @@ public class ImageGen
 			savePath = jSaver.getSelectedFile().getAbsolutePath();
 			String filename = myObj.nextLine();
 			spriteSheets.get(index).saveImage(savePath, filename);
-      readPath = editPath(readPath);
-      savePath = editPath(savePath);
 			
 			try 
 			{
@@ -143,8 +141,6 @@ public class ImageGen
 			savePath = jSaver.getSelectedFile().getAbsolutePath();
 			String filename = myObj.nextLine();
 			sprite.saveImage(savePath, filename);
-      readPath = editPath(readPath);
-      savePath = editPath(savePath);
 			
 			try 
 			{
@@ -164,14 +160,4 @@ public class ImageGen
 			System.out.println("Nothing selected... Exiting.");
 		}
 	}
-  
-  private String editPath(String s)
-  {
-    while(s.length() > 0 && s.charAt(s.length() - 1) != '/')
-    {
-      s = s.substring(0, s.length() - 1);
-    }
-    s = s.substring(0, s.length() - 1);
-    return s;
-  }
 }
