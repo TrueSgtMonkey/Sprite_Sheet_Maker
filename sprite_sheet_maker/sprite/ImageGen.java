@@ -156,8 +156,16 @@ public class ImageGen
             savePath = jSaver.getSelectedFile().getAbsolutePath();
             String filename = myObj.nextLine();
             sprite.saveImage(savePath, filename);
-            readPath = editPath(readPath);
-            savePath = editPath(savePath);
+            if(isMacOS)
+            {
+                readPath = editPath(readPath);
+                savePath = editPath(savePath);
+                if(readPath.equals("") || savePath.equals(""))
+                {
+                    System.out.println("Could not find readPath or savePath...");
+                    return;
+                }
+            }
             
             try 
             {
@@ -188,7 +196,16 @@ public class ImageGen
     {
       s = s.substring(0, s.length() - 1);
     }
-    s = s.substring(0, s.length() - 1);
+    if(s.length() > 0)
+    {
+        s = s.substring(0, s.length() - 1);
+    }
+    else
+    {
+        s = "";
+        System.out.println("Could not find / in path!");
+    }
+   
     return s;
   }
 }
