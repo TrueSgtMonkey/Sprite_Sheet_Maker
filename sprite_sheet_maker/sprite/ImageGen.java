@@ -29,19 +29,13 @@ public class ImageGen
         String osName = System.getProperty("os.name").toLowerCase();
         isMacOS = osName.startsWith("mac os x");
         
-        if(isMacOS)
-        {
-            System.out.println("You are using MacOS!");
-        }
-        else
-        {
-            System.out.println("You are not using MacOS!");
-        }
-        
         Scanner paths = null;
         try
         {
-            paths = new Scanner(new File("save_paths.txt"));
+            if(isMacOS)
+                paths = new Scanner(new File("mac_save_paths.txt"));
+            else
+                paths = new Scanner(new File("save_paths.txt"));
         }
         catch(IOException e)
         {
@@ -56,12 +50,14 @@ public class ImageGen
         
         if(!readFile.exists())
         {
-            readPath = "../";
+            if(isMacOS)
+                readPath = "../";
             readFile = new File(readPath);
         }
         if(!saveFile.exists())
         {
-            savePath = "../";
+            if(isMacOS)
+                savePath = "../";
             saveFile = new File(savePath);
         }
         
@@ -123,12 +119,16 @@ public class ImageGen
             savePath = jSaver.getSelectedFile().getAbsolutePath();
             String filename = myObj.nextLine();
             spriteSheets.get(index).saveImage(savePath, filename);
-      readPath = editPath(readPath);
-      savePath = editPath(savePath);
+            readPath = editPath(readPath);
+            savePath = editPath(savePath);
             
             try 
             {
-                FileWriter myWriter = new FileWriter("save_paths.txt");
+                FileWriter myWriter; 
+                if(isMacOS)
+                    myWriter = new FileWriter("mac_save_paths.txt");
+                else
+                    myWriter = new FileWriter("save_paths.txt");
                 myWriter.write(readPath + "\n" + savePath);
                 myWriter.close();
             } 
@@ -156,12 +156,16 @@ public class ImageGen
             savePath = jSaver.getSelectedFile().getAbsolutePath();
             String filename = myObj.nextLine();
             sprite.saveImage(savePath, filename);
-      readPath = editPath(readPath);
-      savePath = editPath(savePath);
+            readPath = editPath(readPath);
+            savePath = editPath(savePath);
             
             try 
             {
-                FileWriter myWriter = new FileWriter("save_paths.txt");
+                FileWriter myWriter; 
+                if(isMacOS)
+                    myWriter = new FileWriter("mac_save_paths.txt");
+                else
+                    myWriter = new FileWriter("save_paths.txt");
                 myWriter.write(readPath + "\n" + savePath);
                 myWriter.close();
             } 
