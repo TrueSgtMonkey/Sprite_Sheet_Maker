@@ -30,7 +30,7 @@ public class SpriteSheet
             {
     			for(int i = 0, j = 0; i < files.length; i++)
     			{
-    				if(files[i].getName().contains(".png") || files[i].getName().contains(".jpg"))
+    				if(files[i].getName().endsWith(".png") || files[i].getName().endsWith(".jpg"))
     				{
                         //the first image we come across, we will set all the grid and height
                         if(gridWidth == 0 && height == 0 && gridHeight == 0)
@@ -73,6 +73,11 @@ public class SpriteSheet
 	
 	public void setupWidthHeight(int i)
 	{
+        if(pics.get(i) == null)
+        {
+            System.out.println("Null at index: " + i);
+            System.exit(1);
+        }
 		//new row
 		if(i % columns == 0 && i > 0)
 		{

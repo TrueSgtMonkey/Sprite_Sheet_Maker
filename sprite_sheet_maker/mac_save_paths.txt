@@ -1,2 +1,2 @@
-/
-/
+/Users/codythompson/Desktop/cody_stuff/godot/3DLand/3DLand/Assets/Sprites/Enemies/Walker
+/Users/codythompson/Desktop/cody_stuff/godot/3DLand/3DLand/Assets/Sprites/Enemies
