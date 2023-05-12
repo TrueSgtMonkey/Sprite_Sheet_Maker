@@ -1,0 +1,1 @@
+g++ main.cpp lodepng.cpp Sprite.cpp SpriteSheet.cpp -Wall -Wextra -pedantic -ansi -O3 -o prog
