@@ -21,7 +21,7 @@ public class ImageGen
     //will contain all of our sprites once we can import multiple ones
     private ArrayList<SpriteSheet> spriteSheets;
     
-    private Scanner myObj;
+    private Scanner userInput;
     
     //loading in the paths and getting the file chooser ready
     public ImageGen()
@@ -69,7 +69,7 @@ public class ImageGen
         
         spriteSheets = new ArrayList<SpriteSheet>();
         
-        myObj = new Scanner(System.in);
+        userInput = new Scanner(System.in);
     }
     
     //getting all of our sub-images from a file and putting it into one 
@@ -77,12 +77,12 @@ public class ImageGen
     public SpriteSheet impImages()
     {
         System.out.print("Enter how many images you want per row: ");
-        int columns = Integer.valueOf(myObj.nextLine());
+        int columns = Integer.valueOf(userInput.nextLine());
         //error checking
         while(columns <= 0)
         {
             System.out.print("Enter how many images you want per row (Must be greater than 0): ");
-            columns = Integer.valueOf(myObj.nextLine());
+            columns = Integer.valueOf(userInput.nextLine());
         }
         
         int sel = jReader.showOpenDialog(null);
@@ -117,7 +117,7 @@ public class ImageGen
         {
             System.out.print("Enter output file name (no need for a path): ");
             savePath = jSaver.getSelectedFile().getAbsolutePath();
-            String filename = myObj.nextLine();
+            String filename = userInput.nextLine();
             spriteSheets.get(index).saveImage(savePath, filename);
             readPath = editPath(readPath);
             savePath = editPath(savePath);
@@ -154,7 +154,7 @@ public class ImageGen
         {
             System.out.print("Enter output file name (no need for a path): ");
             savePath = jSaver.getSelectedFile().getAbsolutePath();
-            String filename = myObj.nextLine();
+            String filename = userInput.nextLine();
             sprite.saveImage(savePath, filename);
             if(isMacOS)
             {

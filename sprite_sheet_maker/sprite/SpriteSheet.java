@@ -1,6 +1,7 @@
 package sprite;
 
 import java.io.*;
+import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
@@ -32,23 +33,20 @@ public class SpriteSheet
     			{
     				if(files[i].getName().endsWith(".png") || files[i].getName().endsWith(".jpg"))
     				{
+						BufferedImage image = getImage(files[i]);
+
                         //the first image we come across, we will set all the grid and height
                         if(gridWidth == 0 && height == 0 && gridHeight == 0)
                         {
-                			gridWidth = getImage(files[i]).getWidth();
-                			height = getImage(files[i]).getHeight();
+                			gridWidth = image.getWidth();
+                			height = image.getHeight();
                 			gridHeight = height;
                         }
-    					pics.add(getImage(files[i]));
+    					pics.add(image);
                         //making sure the i is in the range of the array list
     					setupWidthHeight(j);
                         j++;
     				}
-                    else
-                    {
-                        //not a picture
-                        columns--;
-                    }
     			}
     			outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     			for(int i = 0; i < pics.size(); i++)
