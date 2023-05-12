@@ -2,6 +2,7 @@
 #include "SpriteSheet.h"
 #include <iostream>
 #include <windows.h>
+#include <fstream>
 extern "C" {
     #include <unistd.h>
 }
@@ -22,6 +23,8 @@ int main () {
 */
 
 unsigned constCharToUnsigned (const char* str);
+int filesFromDirToText (const unsigned& numOfColumns, const std::string& path,
+                        const std::string outputPath, const char* currentDirectory);
 
 int main (int argc, const char* argv[]) {
     switch (argc) {
@@ -41,13 +44,34 @@ int main (int argc, const char* argv[]) {
     char currentDirectory[512];
     size_t len = sizeof(currentDirectory);
     GetModuleFileName(NULL, currentDirectory, len);
-    unsigned numOfColumns = constCharToUnsigned (argv[3]);
+
+    unsigned numOfColumns;
+    numOfColumns = constCharToUnsigned (argv[3]);
+    int filesCheck = filesFromDirToText (numOfColumns, path, outputPath, currentDirectory);
+    if (filesCheck != 0) {
+        return filesCheck;
+    }
+
+    SpriteSheet spriteSheet(numOfColumns);
+    std::ifstream ifs;
+    ifs.open((outputPath + "\\temp_dir.txt").c_str());
+    std::string line;
+    while (ifs.peek() != EOF) {
+        // want to grab files even if they have spaces
+        getline (ifs, line);
+        std::cout << "\'" << line << "\'" << std::endl;
+    }
+
+    return 0;
+}
+
+int filesFromDirToText (const unsigned& numOfColumns, const std::string& path,
+                        const std::string outputPath, const char* currentDirectory) {
     if (numOfColumns == 0) {
         std::cout << "<num_of_columns> argument must be greater than 0!" << std::endl;
         return 3;
     }
 
-    SpriteSheet spriteSheet(numOfColumns);
     chdir (path.c_str());
     system (("dir /b /a-d > " + outputPath + "\\temp_dir.txt").c_str());
     chdir (currentDirectory);
