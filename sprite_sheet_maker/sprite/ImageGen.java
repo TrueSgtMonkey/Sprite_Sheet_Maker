@@ -22,44 +22,56 @@ public class ImageGen
     private ArrayList<SpriteSheet> spriteSheets;
     
     private Scanner userInput;
+    private String  userPath;
+    private String  userPathMac;
     
     //loading in the paths and getting the file chooser ready
     public ImageGen()
     {
         String osName = System.getProperty("os.name").toLowerCase();
         isMacOS = osName.startsWith("mac os x");
+
+        // Creating user file if it doesn't exist.
+        userPath = "save_paths.txt";
+        userPathMac = "mac_save_paths.txt";
+        File userFile = null;
+        File userFileMac = null;
+        String userFileContents = "C:\\\nC:\\";
+        String userFileContentsMac = "/\n/";
+
+        if(isMacOS)
+            userFileMac = createUserFile(userPathMac, userFileContentsMac);
+        else
+            userFile = createUserFile(userPath, userFileContents);
         
+        // Reading from the user file (whether just created or not)
         Scanner paths = null;
         try
         {
             if(isMacOS)
-                paths = new Scanner(new File("mac_save_paths.txt"));
+                paths = new Scanner(userFileMac);
             else
-                paths = new Scanner(new File("save_paths.txt"));
+                paths = new Scanner(userFile);
         }
         catch(IOException e)
         {
             e.printStackTrace();
         }
         
+        // Getting strings from user file and then opening up the directories
+        // based on strings
         readPath = paths.nextLine();
         savePath = paths.nextLine();
-        
         File readFile = new File(readPath);
         File saveFile = new File(savePath);
         
-        if(!readFile.exists())
-        {
-            if(isMacOS)
-                readPath = "../";
-            readFile = new File(readPath);
-        }
-        if(!saveFile.exists())
-        {
-            if(isMacOS)
-                savePath = "../";
-            saveFile = new File(savePath);
-        }
+        // checking if we are one directory too far if on Mac - otherwise returning file
+        readFile = checkMacDirectory(readFile);
+        saveFile = checkMacDirectory(saveFile);
+
+        // returning root if directory invalid
+        readFile = checkInvalidDirectory(readFile);
+        saveFile = checkInvalidDirectory(saveFile);
         
         jReader = new JFileChooser(readFile);
         jSaver = new JFileChooser(saveFile);
@@ -190,22 +202,73 @@ public class ImageGen
         }
     }
   
-  private String editPath(String s)
-  {
-    while(s.length() > 0 && s.charAt(s.length() - 1) != '/')
+    private String editPath(String s)
     {
-      s = s.substring(0, s.length() - 1);
+        while(s.length() > 0 && s.charAt(s.length() - 1) != '/')
+        {
+            s = s.substring(0, s.length() - 1);
+        }
+        if(s.length() > 0)
+        {
+            s = s.substring(0, s.length() - 1);
+        }
+        else
+        {
+            s = "";
+            System.out.println("Could not find / in path!");
+        }
+    
+        return s;
     }
-    if(s.length() > 0)
+
+    private File createUserFile(String path, String contents)
     {
-        s = s.substring(0, s.length() - 1);
+        File file = new File(path);
+
+        try
+        {
+            // file already exists - just return file at path with saved contents
+            if (!file.createNewFile())
+                return file;
+
+            // start the file out with a read path and a save path
+            FileWriter writer = new FileWriter(path);
+            writer.write(contents);
+            writer.close();
+        } catch (IOException e)
+        {
+            System.out.println("Cannot create new file: " + path);
+            e.printStackTrace();
+        }
+
+        return file;
     }
-    else
+
+    private File checkMacDirectory(File file)
     {
-        s = "";
-        System.out.println("Could not find / in path!");
+        // go back one directory if we went too far
+        if(file.exists())
+            return file;
+
+        if(isMacOS)
+            readPath = "../";
+        file = new File(readPath);
+
+        return file;
     }
-   
-    return s;
-  }
+
+    private File checkInvalidDirectory(File file)
+    {
+        // file is valid
+        if(file.exists())
+            return file;
+
+        // file is invalid - start at the root directory
+        if(isMacOS)
+            file = new File("/");
+        else
+            file = new File("C:\\");
+
+        return file;
+    }
 }
