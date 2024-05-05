@@ -6,6 +6,8 @@ this project for the GUI.
 */
 
 import java.util.Scanner;
+import java.util.Vector;
+
 import javax.swing.JFileChooser;
 import java.io.File;
 import java.io.FileWriter;   // Import the FileWriter class
@@ -164,9 +166,7 @@ public class ImageGen
         
         if(saveSel == JFileChooser.APPROVE_OPTION)
         {
-            System.out.print("Enter output file name (no need for a path): ");
-            savePath = jSaver.getSelectedFile().getAbsolutePath();
-            String filename = userInput.nextLine();
+            String filename = chooseFromOutputDirectory();
             sprite.saveImage(savePath, filename);
             if(isMacOS)
             {
@@ -199,6 +199,56 @@ public class ImageGen
         else
         {
             System.out.println("Nothing selected... Exiting.");
+        }
+    }
+
+    private String chooseFromOutputDirectory()
+    {
+        int index = 0;
+        savePath = jSaver.getSelectedFile().getAbsolutePath();
+        File file = new File(savePath);
+
+        Vector<String> filenameVec = new Vector<String>();
+        setupVectorFile(filenameVec, file);
+
+        for (String filename : filenameVec)
+        {
+            System.out.println(index + ") " + filename);
+            index += 1;
+        }
+        System.out.println(index + ") Create new file");
+        System.out.print("Choice: ");
+        int choice = Integer.valueOf(userInput.nextLine());
+
+        // Either outside the list's range or our range of choices
+        // Whatever the case, creating a new file is safer
+        if (choice >= filenameVec.size())
+        {
+            System.out.print("Enter output file name (no need for a path): ");
+            String filenameToReturn = userInput.nextLine();
+            if (!filenameToReturn.endsWith(".png") && !filenameToReturn.endsWith(".jpg"))
+                filenameToReturn += ".png";
+
+            return filenameToReturn;
+        }
+
+        return filenameVec.get(choice);
+    }
+
+    private void setupVectorFile(Vector<String> filenameVec, File file)
+    {
+        File[] fileList = file.listFiles();
+        if (fileList == null)
+        {
+            System.out.println("Invalid directory: " + savePath);
+        }
+
+        for(File dirFile : fileList)
+        {
+            if (!dirFile.getName().endsWith(".png") && !dirFile.getName().endsWith(".jpg"))
+                continue;
+
+            filenameVec.addElement(dirFile.getName());
         }
     }
   

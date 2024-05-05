@@ -1,7 +1,6 @@
 package sprite;
 
 import java.io.*;
-import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
@@ -101,8 +100,8 @@ public class SpriteSheet
 	{
 		try {
 			// retrieve image
-			File outputfile = new File(path + "/" + filename + ".png");
-			System.out.print("Writing image to file...");
+			File outputfile = new File(path + "/" + filename);
+			System.out.print("Writing \"" + outputfile.getName() + "\" to file...");
 			ImageIO.write(outputImage, "png", outputfile);
 			System.out.println(" done!");
 		} catch (IOException e) {
