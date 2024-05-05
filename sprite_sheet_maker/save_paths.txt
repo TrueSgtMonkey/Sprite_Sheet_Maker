@@ -1,2 +1,2 @@
-C:\Users\foreskin\Desktop\sum_good_shit\game_dev\godot\3DLand\3DLand\Assets\Sprites\Enemies\ShotDude\animation
-C:\Users\foreskin\Desktop\sum_good_shit\game_dev\godot\3DLand\3DLand\Assets\Sprites\Enemies\ShotDude
+C:\
+C:\
