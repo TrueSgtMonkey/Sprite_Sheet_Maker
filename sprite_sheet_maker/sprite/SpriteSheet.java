@@ -10,29 +10,31 @@ public class SpriteSheet
 {
     //will contain the full list of pictures in the specified folder
     private ArrayList<BufferedImage> pics;
-    private int width, height, gridWidth, gridHeight, columns;
+    private int width, height, gridWidth, gridHeight, columns, imagesFound;
     private boolean doneWithWidth;
     private BufferedImage outputImage;
     
-    public SpriteSheet(String folder, int columns)
-    {
-        File path = new File(folder);
+    public SpriteSheet(int columns) {
         //setting up dimensions for the single image
         width = 0; height = 0; gridWidth = 0; gridHeight = 0;
         this.columns = columns;
         doneWithWidth = false;
-        if(path.exists())
-        {
-            pics = new ArrayList<BufferedImage>();
+        pics = new ArrayList<BufferedImage>();
+        imagesFound = 0;
+    }
+
+    public void addToSpriteSheet(String folder) {
+        File path = new File(folder);
+        if(path.exists()) {
             File[] files = path.listFiles();
             Arrays.sort(files);
-            if(files != null)
-            {
-                for(int i = 0, j = 0; i < files.length; i++)
-                {
-                    if(files[i].getName().endsWith(".png") || files[i].getName().endsWith(".jpg"))
-                    {
-                        BufferedImage image = getImage(files[i]);
+
+            // Does not create an output image, but adds to the current list
+            // of images.
+            if(files != null) {
+                for(int dirIndex = 0; dirIndex < files.length; dirIndex++) {
+                    if(files[dirIndex].getName().endsWith(".png") || files[dirIndex].getName().endsWith(".jpg")) {
+                        BufferedImage image = getImage(files[dirIndex]);
 
                         //the first image we come across, we will set all the grid and height
                         if(gridWidth == 0 && height == 0 && gridHeight == 0)
@@ -43,47 +45,45 @@ public class SpriteSheet
                         }
                         pics.add(image);
                         //making sure the i is in the range of the array list
-                        setupWidthHeight(j);
-                        j++;
+                        setupWidthHeight();
+                        imagesFound++;
                     }
                 }
-                outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-                for(int i = 0; i < pics.size(); i++)
-                {
-                    System.out.print("\r[");
-                    setupTiles(i);
-                    System.out.print((i+1) + "/" + pics.size() + "]");
-                }
-                System.out.println();
-            }
-            else
-            {
+            } else {
                 System.out.println("Cannot find " + folder);
             }
-        }
-        else
-        {
+        } else {
             System.out.println("Directory: \"" + folder + "\" does not exist!");
             System.exit(1);
         }
     }
-    
-    public void setupWidthHeight(int i)
+
+    public void createOutputImage() {
+        outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for(int i = 0; i < pics.size(); i++) {
+            System.out.print("\r[");
+            setupTiles(i);
+            System.out.print((i+1) + "/" + pics.size() + "]");
+        }
+        System.out.println();
+    }
+
+    public void setupWidthHeight()
     {
-        if(pics.get(i) == null)
+        if(pics.get(imagesFound) == null)
         {
-            System.out.println("Null at index: " + i);
+            System.out.println("Null at index: " + imagesFound);
             System.exit(1);
         }
         //new row
-        if(i % columns == 0 && i > 0)
+        if(imagesFound % columns == 0 && imagesFound > 0)
         {
-            height += pics.get(i).getHeight();
+            height += pics.get(imagesFound).getHeight();
             doneWithWidth = true;
         }
         else if(!doneWithWidth)
         {
-            width += pics.get(i).getWidth();
+            width += pics.get(imagesFound).getWidth();
         }
     }
     
